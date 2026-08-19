@@ -1,27 +1,38 @@
-// DarkFactory — Fase 2
-// Por enquanto: só captura os dados do formulário e guarda localmente.
-// Nada de IA, TTS ou renderização ainda — isso vem nas próximas fases.
-
 const statusMsg = document.getElementById("statusMsg");
+const WORKER_URL = "https://darkfactory-backend.maikesilva977.workers.dev";
 
 document.getElementById("btnAutomatico").addEventListener("click", () => {
   statusMsg.textContent = "Geração automática de tema ainda não implementada (próxima fase).";
 });
 
-document.getElementById("btnGerar").addEventListener("click", () => {
-  const dados = {
-    nicho: document.getElementById("nicho").value.trim(),
-    tema: document.getElementById("tema").value.trim(),
-    duracao: document.getElementById("duracao").value,
-    estilo: document.getElementById("estilo").value,
-    criadoEm: new Date().toISOString()
-  };
+document.getElementById("btnGerar").addEventListener("click", async () => {
+  const nicho = document.getElementById("nicho").value.trim();
+  const tema = document.getElementById("tema").value.trim();
+  const duracao = document.getElementById("duracao").value;
+  const estilo = document.getElementById("estilo").value;
 
-  if (!dados.nicho || !dados.tema) {
+  if (!nicho || !tema) {
     statusMsg.textContent = "Preencha ao menos o nicho e o tema.";
     return;
   }
 
-  localStorage.setItem("darkfactory_ultimo_pedido", JSON.stringify(dados));
-  statusMsg.textContent = "Dados salvos no navegador. A geração real ainda será implementada.";
+  statusMsg.textContent = "Enviando pedido...";
+
+  try {
+    const response = await fetch(WORKER_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ nicho, tema, duracao, estilo })
+    });
+
+    const data = await response.json();
+
+    if (data.ok) {
+      statusMsg.textContent = "Roteiro sendo gerado! Confira em alguns segundos na pasta roteiros/ do repositório.";
+    } else {
+      statusMsg.textContent = "Erro ao gerar: " + (data.error || "desconhecido");
+    }
+  } catch (err) {
+    statusMsg.textContent = "Erro de conexão: " + err.message;
+  }
 });
