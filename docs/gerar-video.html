@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DarkFactory — Gerar vídeo</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <a href="index.html" class="back-link">←</a>
+    <h1>Gerar vídeo</h1>
+  </header>
+
+  <main class="form-page">
+    <label class="field">
+      <span>Nicho</span>
+      <input type="text" id="nicho" placeholder="Ex: Mistérios e curiosidades">
+    </label>
+
+    <label class="field">
+      <span>Tema</span>
+      <input type="text" id="tema" placeholder="Ex: O caso do Triângulo das Bermudas">
+    </label>
+
+    <label class="field">
+      <span>Duração</span>
+      <select id="duracao">
+        <option value="35">35 segundos</option>
+        <option value="45" selected>45 segundos</option>
+        <option value="60">60 segundos</option>
+      </select>
+    </label>
+
+    <label class="field">
+      <span>Estilo</span>
+      <select id="estilo">
+        <option value="misterio">Mistério / Suspense</option>
+        <option value="curiosidade">Curiosidade</option>
+        <option value="historia-real">História real</option>
+      </select>
+    </label>
+
+    <button type="button" class="btn-secondary" id="btnAutomatico">
+      Gerar tema automaticamente
+    </button>
+
+    <button type="button" class="btn-primary" id="btnGerar">
+      Gerar vídeo
+    </button>
+
+    <p class="status-msg" id="statusMsg"></p>
+  </main>
+
+  <script src="gerar-video.js"></script>
+</body>
+</html>
