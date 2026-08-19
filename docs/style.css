@@ -1,3 +1,65 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, Roboto, sans-serif;
+  background: #0d0d12;
+  color: #f2f2f5;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.topbar {
+  padding: 24px 20px 16px;
+  border-bottom: 1px solid #24242e;
+}
+
+.topbar h1 {
+  font-size: 1.5rem;
+  letter-spacing: 0.5px;
+}
+
+.menu {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 16px;
+  background: #17171f;
+  border: 1px solid #24242e;
+  border-radius: 14px;
+  color: #f2f2f5;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: background 0.15s ease;
+}
+
+.menu-item:active {
+  background: #1f1f29;
+}
+
+.menu-icon {
+  font-size: 1.3rem;
+}
+
+.footer {
+  text-align: center;
+  padding: 16px;
+  font-size: 0.75rem;
+  color: #55555f;
+}
+
 .back-link {
   color: #f2f2f5;
   text-decoration: none;
@@ -56,4 +118,4 @@
   font-size: 0.85rem;
   color: #9b9bab;
   text-align: center;
-}
+  }
