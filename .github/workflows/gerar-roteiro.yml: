@@ -1,0 +1,61 @@
+name: Gerar Roteiro
+
+on:
+  workflow_dispatch:
+    inputs:
+      nicho:
+        description: 'Nicho'
+        required: true
+        default: 'Mistérios e curiosidades'
+      tema:
+        description: 'Tema'
+        required: true
+      duracao:
+        description: 'Duração em segundos'
+        required: true
+        default: '45'
+      estilo:
+        description: 'Estilo'
+        required: true
+        default: 'misterio'
+
+permissions:
+  contents: write
+
+jobs:
+  gerar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do repositório
+        uses: actions/checkout@v4
+
+      - name: Chamar Gemini e gerar roteiro
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          NICHO: ${{ github.event.inputs.nicho }}
+          TEMA: ${{ github.event.inputs.tema }}
+          DURACAO: ${{ github.event.inputs.duracao }}
+          ESTILO: ${{ github.event.inputs.estilo }}
+        run: |
+          PROMPT="Escreva um roteiro em português brasileiro para um vídeo curto vertical de $DURACAO segundos, nicho: $NICHO, tema: $TEMA, estilo: $ESTILO. Estrutura: gancho forte nos primeiros 3 segundos, contextualização, desenvolvimento, revelação/reviravolta, conclusão curta com pergunta para engajamento. Se o tema envolver fatos não comprovados, deixe isso claro no texto. Responda apenas com o roteiro em texto corrido, sem formatação markdown."
+
+          JSON_BODY=$(jq -n --arg prompt "$PROMPT" '{contents: [{parts: [{text: $prompt}]}]}')
+
+          RESPONSE=$(curl -s -X POST \
+            "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=$GEMINI_API_KEY" \
+            -H "Content-Type: application/json" \
+            -d "$JSON_BODY")
+
+          echo "$RESPONSE" | jq -r '.candidates[0].content.parts[0].text' > roteiro-gerado.txt
+
+          mkdir -p roteiros
+          TIMESTAMP=$(date +%Y%m%d-%H%M%S)
+          cp roteiro-gerado.txt "roteiros/roteiro-$TIMESTAMP.txt"
+
+      - name: Salvar resultado no repositório
+        run: |
+          git config user.name "DarkFactory Bot"
+          git config user.email "actions@github.com"
+          git add roteiros/
+          git commit -m "Gerar roteiro automatico" || echo "Nada para commitar"
+          git push
