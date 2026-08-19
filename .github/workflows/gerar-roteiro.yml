@@ -46,6 +46,10 @@ jobs:
             -H "Content-Type: application/json" \
             -d "$JSON_BODY")
 
+          echo "=== RESPOSTA COMPLETA DA API (para diagnóstico) ==="
+          echo "$RESPONSE"
+          echo "=== FIM DA RESPOSTA ==="
+
           echo "$RESPONSE" | jq -r '.candidates[0].content.parts[0].text' > roteiro-gerado.txt
 
           mkdir -p roteiros
