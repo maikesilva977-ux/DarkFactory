@@ -1,3 +1,4 @@
+// forçar redeploy na primeira linha
 export default {
   async fetch(request, env) {
     const allowedOrigin = "https://maikesilva977-ux.github.io";
